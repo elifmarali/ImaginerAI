@@ -1,0 +1,38 @@
+.photos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 500px;
+    gap: 24px;
+  }
+  
+  .photo {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding: 16px;
+    gap:12px;
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 0 30px 0 rgb(10, 10, 10);
+    z-index: 1;
+    color: white;
+  
+    &::before {
+      content: "";
+      display: block;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      top: 0;
+      right: 0;
+      background: linear-gradient(0, var(--black), transparent 50%, transparent);
+      z-index: -1;
+    }
+  
+    img {
+      z-index: -2;
+      object-fit: cover;
+    }
+  }

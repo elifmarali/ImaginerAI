@@ -1,0 +1,18 @@
+.footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .footerContainer{
+        gap: 10px;
+        margin:20px 0;
+        opacity: 0.2; 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: 300ms all;
+        &:hover{
+            opacity: 1;
+        }
+    }
+}
+

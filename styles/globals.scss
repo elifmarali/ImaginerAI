@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+    background-color: black;
+    color: white;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr min(1024px, 90%) 1fr;
+  padding-top: 6vh;
+}
+
+.layout > * {
+  grid-column: 2;
+}
+
+.overlay {
+  background: radial-gradient(at 71% 77%, #7d7aff80 0, transparent 21%),
+    radial-gradient(at 36% 47%, #fa313180 0, transparent 50%),
+    radial-gradient(at 45% 51%, #7d7aff80 0, transparent 53%),
+    radial-gradient(at 73% 44%, #2121e280 0, transparent 54%),
+    radial-gradient(at 24% 10%, #2121e280 0, transparent 40%),
+    radial-gradient(at 76% 46%, #7d7aff80 0, transparent 50%);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  filter: blur(44px);
+  z-index: -1;
+  opacity: 0.5;
+}
