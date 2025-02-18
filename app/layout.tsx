@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import { mainFont } from "@/libs/font"
 import { PromptProvider } from "@/context/usePrompt";
+import { SelectedProvider } from "@/context/useSelected";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -24,12 +25,14 @@ export default function RootLayout({
       >
         <AppRouterCacheProvider options={{ key: 'css' }}>
           <PromptProvider>
-            <Header />
-            <main>
-              <div aria-hidden="true" className="overlay" />
-              {children}
-            </main>
-            <Footer />
+            <SelectedProvider>
+              <Header />
+              <main>
+                <div aria-hidden="true" className="overlay" />
+                {children}
+              </main>
+              <Footer />
+            </SelectedProvider>
           </PromptProvider>
         </AppRouterCacheProvider>
       </body>
