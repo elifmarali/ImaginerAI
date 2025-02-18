@@ -5,7 +5,7 @@ import { createContext } from "react";
 const SelectedContext = createContext();
 
 export function SelectedProvider({ children }) {
-  const [selectedTab, setSelectedTab] = useState(null);
+  const [selectedTab, setSelectedTab] = useState();
 
   const data = {
     selectedTab,

@@ -1,0 +1,53 @@
+.buttonSection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40%;
+    border-radius: 8px;
+    position: relative;
+    padding: 1px;
+    background: linear-gradient(
+      45deg,
+      #ff4593,
+      #ffe713 32%,
+      #17d7ff 66%,
+      #077bff
+    );
+    margin-top: 30px;
+    z-index: 1;
+    overflow: hidden;
+  
+    &::after {
+      content: "";
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      right: 2px;
+      bottom: 2px;
+      border-radius: 6px;
+      background-color: #000;
+      transition: background 0.3s ease-in-out;
+    }
+  
+    &:hover::after {
+      background: linear-gradient(
+        45deg,
+        #ff4593,
+        #ffe713 32%,
+        #17d7ff 66%,
+        #077bff
+      );
+    }
+  
+    .button {
+      z-index: 2;
+      color: white !important;
+      position: relative;
+      transition: color 0.3s ease-in-out;
+    }
+  
+    &:hover .button {
+      color: black !important;
+    }
+  }
+  
