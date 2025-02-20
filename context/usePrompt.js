@@ -1,5 +1,6 @@
 "use client";
 import { createContext, useContext, useState } from "react";
+import axios from "axios";
 
 const PromptContext = createContext();
 
@@ -7,7 +8,11 @@ export function PromptProvider({ children }) {
   const [prompt, setPrompt] = useState("");
 
   const submitPrompt = async () => {
-    //api generate
+
+/*     // başarılı
+    const res = await axios.get("/api/imaginerData")
+    console.log(res); 
+     */
   };
   const data = {
     prompt,
