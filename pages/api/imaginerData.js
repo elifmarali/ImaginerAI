@@ -58,7 +58,19 @@ export default async function handler(req, res) {
     }
   } else if (req.method === "GET") {
     try {
-      const imaginerData = await Imaginer.find().exec();
+      const { filter } = req.query;
+
+      let filters = {};
+
+      // Eğer filter varsa, filter'i JSON formatında parse ediyoruz
+      if (filter) {
+        filters = JSON.parse(filter);
+      }
+
+      console.log("Uygulanan Filtre:", filters);
+
+      // MongoDB'ye filtreyi uygulayarak veri çekiyoruz
+      const imaginerData = await Imaginer.find(filters).exec();
       console.log("Fetched imaginerData:", imaginerData);
 
       return res.status(200).json(imaginerData);
@@ -66,7 +78,7 @@ export default async function handler(req, res) {
       console.error("Error fetching data:", error);
       return res.status(500).json({ error: "Failed to fetch data" });
     }
-  } else {
+  }  else {
     return res.status(405).json({ error: "Method not allowed" });
   }
 }
