@@ -11,7 +11,7 @@ function HomeContainer() {
   const {selectedTab} = useSelected();
 
   return (
-    <div>
+    <div className='flex flex-col'>
       {
         selectedTab ?
           selectedTab === "generate" ? (

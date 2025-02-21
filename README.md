@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Imaginer AI - Dil Destekli Görsel ve Metin Kayıt Sistemi
 
-## Getting Started
+## Proje Açıklaması
 
-First, run the development server:
+Imaginer AI, kullanıcıların girdiği metinleri ve görselleri MongoDB'ye kaydeden bir projedir. Kullanıcılar İngilizce veya Türkçe bir metin girdiğinde, sistem bu metni otomatik olarak diğer dile çevirir ve her iki dilde de veritabanına kaydeder. Ayrıca, kullanıcının yüklediği görseller base64 formatında saklanır. 
 
+Bu proje, çok dilli içerik yönetimini kolaylaştırmak ve kullanıcı deneyimini geliştirmek için tasarlanmıştır.
+
+## Özellikler
+- Kullanıcı tarafından girilen metin, boşluklara göre kelime kelime ayrılarak MongoDB'de diziler halinde saklanır.
+- Metinler, dil desteği sağlayan bir API (Translate API) ile çevrilerek hem İngilizce hem de Türkçe olarak kaydedilir.
+- Kullanıcı tarafından yüklenen görseller, base64 formatında veritabanına kaydedilir.
+- Next.js API route'ları ile dosya yükleme ve metin işleme gerçekleştirilir.
+- Yeni bir image generate edilmek istenildiğinde veritabanındaki kelimeleri kapsayacak şekilde en yakın görsel bulunur ve sunulur.
+
+## Kullanılan Teknolojiler
+- **Next.js** - React tabanlı modern web uygulamaları için framework
+- **MongoDB** - NoSQL veritabanı
+- **Mongoose** - MongoDB için ODM (Object Data Modeling) kütüphanesi
+- **Translate API** - Metinlerin otomatik olarak çevrilmesi için kullanıldı
+- **Axios** - API isteklerini yönetmek için
+- **MUI (Material UI)** - UI bileşenleri
+- **Tailwind CSS** - Modern CSS framework
+
+## Kurulum ve Kullanım
+
+### 1. Depoyu Klonlayın
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/elifmarali/ImaginerAI
+cd ImaginerAI
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Bağımlılıkları Yükleyin
+```bash
+npm install
+```
+veya
+```bash
+yarn install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Ortam Değişkenlerini Ayarlayın
+Projede kullanılan API anahtarları ve veritabanı bağlantı bilgileri `.env.local` dosyasında tanımlanmalıdır.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 4. Geliştirme Ortamında Çalıştırın
+```bash
+npm run dev
+```
+veya
+```bash
+yarn dev
+```
 
-## Learn More
+### 5. Kullanım
 
-To learn more about Next.js, take a look at the following resources:
+#### Add Data
+- Bir metin girerek ve bir görsel yükleyerek `Submit` butonuna tıklayın.
+- Sistem, metni çevirecek ve her iki dilde de kaydedecektir.
+- Yüklenen görseller, base64 formatında saklanacaktır.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+#### Image Generater
+- Bir propmt girerek (Türkçe/İngilizce) `Generate` butonuna tıklayın.
+- Loading kısmının geçmesini bekleyin.
+- Girdiğiniz prompta en uygun olan bir resim var ise resim getirilir.
+- Eğer daha önceden veri tabanına benzer bir kayıt atılmadıysa mevcuttaki önerilerde bulunulur.

@@ -1,8 +1,7 @@
 import axios from "axios";
+import translate from "translate";
 
 async function handleImage(file: File): Promise<string | null> {
-  console.log("Selected file:", file);
-
   if (!file) return null;
 
   return new Promise((resolve, reject) => {
@@ -23,11 +22,20 @@ async function handleImage(file: File): Promise<string | null> {
 export const submitAddData = async (text: string, file: File) => {
   const formattedImage: any = await handleImage(file);
   const textArray = text.trim().split(" ");
-  console.log("formattedImage : ",formattedImage);
-  
+
+  // Metin dili belirlenip, çeviri yapılır
+  const detectedLang = /[a-zA-Z]/.test(text) ? "en" : "tr";
+  const targetLang = detectedLang==="en" ? "tr" : "en";
+
+  const translateText = await translate(text, {from:detectedLang,to:targetLang});
+  const translateTextArray = translateText.trim().split(" ");
+
   try {
     await axios.post("/api/imaginerData", {
-      textArray, // String dizisi oluştur
+      originalText:text,
+      originalTextArray:textArray,
+      translateText,
+      translateTextArray,
       fileBase64: formattedImage,
     });
 

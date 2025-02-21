@@ -1,4 +1,5 @@
 export interface IColorfullButtonProps{
     text:string,
-    click?:string
+    click?:string,
+    buttonType?:string
 }

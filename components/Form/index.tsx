@@ -5,7 +5,8 @@ import Button from '@mui/joy/Button';
 import SvgIcon from '@mui/joy/SvgIcon';
 import { styled } from '@mui/joy';
 import ColorfullButton from '../ColorfullButton';
-import {submitAddData} from "@/services/AddData/index"
+import { submitAddData } from "@/services/AddData/index"
+import { useSelected } from '@/context/useSelected';
 
 const VisuallyHiddenInput = styled('input')`
   clip: rect(0 0 0 0);
@@ -22,32 +23,34 @@ const VisuallyHiddenInput = styled('input')`
 function Form() {
   const [text, setText] = useState<string>("");
   const [file, setFile] = useState<File | null>();
-  const [textError,setTextError]= useState({isError: false,errorText : ""});
-  const [fileError, setFileError]=useState({isError: false,errorText : ""});
+  const [textError, setTextError] = useState({ isError: false, errorText: "" });
+  const [fileError, setFileError] = useState({ isError: false, errorText: "" });
+  const { setSelectedTab } = useSelected();
 
-  const alertControl =async ()=>{
+  const alertControl = async () => {
     setTextError({ isError: false, errorText: "" });
     setFileError({ isError: false, errorText: "" });
 
-    if(text?.trim().split("").length<3 || text===""){
-      setTextError({isError:true,errorText:"At least 3 words must be entered!"})
+    if (text?.trim().split("").length < 3 || text === "") {
+      setTextError({ isError: true, errorText: "At least 3 words must be entered!" })
     }
-    if(!file){
-      setFileError({isError:true,errorText:"Image is required field"})
+    if (!file) {
+      setFileError({ isError: true, errorText: "Image is required field" })
     }
   }
 
-  const addData =async (e:any) => {
+  const addData = async (e: any) => {
     e.preventDefault();
     await alertControl();
-    if(!textError.isError && !fileError.isError && file && text){
-      submitAddData(text,file);
+    if (!textError.isError && !fileError.isError && file && text) {
+      await submitAddData(text, file);
+      setSelectedTab("");
     }
   }
 
 
   return (
-    <form className='bg-gray-300 rounded px-5 py-10 gap-4 flex flex-col' onSubmit={(e) => addData(e)}>
+    <form className='bg-gray-300 rounded px-5 py-5 gap-3 flex flex-col' onSubmit={(e) => addData(e)}>
       <TextField className='w-full' label="Please enter the description that bext describes your image." onChange={(e) => setText(e.target.value)} />
       <Button
         component="label"
@@ -81,19 +84,18 @@ function Form() {
       {
         file && (
           <div className='flex px-4'>
-            <div className='flex-1'>{file?.name}</div>
+            <div className='flex flex-1 text-black text-sm font-bold items-center'>{file?.name}</div>
             <div className='flex gap-4'>
-              <Button color='danger' onClick={() => setFile(null)}>Remove</Button>
-              <Button onClick={() => window.open(URL.createObjectURL(file))}>Show</Button>
+              <Button variant="soft" color='danger' onClick={() => setFile(null)}>Remove</Button>
+              <Button variant="soft" onClick={() => window.open(URL.createObjectURL(file))}>Show</Button>
             </div>
           </div>
         )
       }
-{/*       <img src={`/uploads/${fileName}`} alt="Uploaded Image" />
+      {/*       <img src={`/uploads/${fileName}`} alt="Uploaded Image" />
  */}
       <div className='flex justify-end'>
-        {/* <ColorfullButton text="Submit" click="" /> */}
-        <button>Submit</button>
+        <Button type='submit' color='success'>Submit</Button>
       </div>
     </form>
   )

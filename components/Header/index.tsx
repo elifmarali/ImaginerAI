@@ -28,7 +28,7 @@ function Header() {
         ) : (
           selectedTab === "generate" ? (
             <>
-              <ColorfullButton text="Back" click="" />
+              <ColorfullButton text="Back" click="" buttonType="small"/>
               <Typography variant="h2" gutterBottom >
                 You just imagine,
                 <br />
@@ -40,13 +40,13 @@ function Header() {
             </>
           ) : (
             <>
-              <ColorfullButton text="Back" click="" />
+              <ColorfullButton text="Back" click="" buttonType="small" />
               <Typography variant="h2" gutterBottom>
                 Add Your Data,
                 <br />
                 Let's create something new!
               </Typography>
-              <Typography variant="h5" gutterBottom>
+              <Typography variant="h6" gutterBottom>
                 Provide the necessary information and we'll generate content based on it.
               </Typography>
             </>
