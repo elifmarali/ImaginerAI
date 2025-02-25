@@ -26,12 +26,12 @@ export default function RootLayout({
         <AppRouterCacheProvider options={{ key: 'css' }}>
           <PromptProvider>
             <SelectedProvider>
-              <Header />
-              <main>
-                <div aria-hidden="true" className="overlay" />
-                {children}
-              </main>
-              <Footer />
+                <Header />
+                <main>
+                  <div aria-hidden="true" className="overlay" />
+                  {children}
+                </main>
+                <Footer />
             </SelectedProvider>
           </PromptProvider>
         </AppRouterCacheProvider>

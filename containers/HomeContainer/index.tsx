@@ -9,7 +9,7 @@ import ButtonSection from '@/components/ButtonsSection';
 import { usePrompt } from '@/context/usePrompt';
 import LoadingSpinner from '@/components/Loading';
 import { Alert, Typography } from '@mui/material';
-import ImageResult from '@/components/ImageResult.tsx';
+import ImageResult from '@/components/ImageResult';
 import SmileSVG from "@/assets/icons/smile.svg"
 import Image from 'next/image';
 
@@ -31,9 +31,9 @@ function HomeContainer() {
                       : (
                         dataResult && (
                           dataResult.length > 0 ?
-                            dataResult.length === 1 ?
-                              (<ImageResult />) :
-                              (<Alert>1'den çok </Alert>)
+                            dataResult.length === 1 &&
+                              (<ImageResult />) 
+                              /* (<Alert>1'den çok </Alert>) */
                             : (
                               <Alert color="warning" sx={{ "& .MuiAlert-message": { paddingTop: "0px" } }}>
                                 <Typography variant='h6' gutterBottom >Hello.</Typography>
@@ -51,7 +51,9 @@ function HomeContainer() {
           )
             :
             (
-              <Form />
+              <div className='min-h-[300px]'>
+                <Form />
+              </div>
             )
           :
           (

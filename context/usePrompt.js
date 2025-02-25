@@ -1,69 +1,99 @@
 "use client";
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { Alert } from "@mui/material";
 
 const PromptContext = createContext();
 
 export function PromptProvider({ children }) {
   const [prompt, setPrompt] = useState("");
   const [promptArray, setPromptArray] = useState([]);
-  const [generateClicked,setGenerateClicked]= useState(false);
-  const [loading,setLoading]=useState(false);
-  const [error,setError]=useState(false);
+  const [generateClicked, setGenerateClicked] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const [dataResult, setDataResult] = useState();
+  const excludedWords = ["of", "the", "a", "an"]; 
 
   useEffect(() => {
     const words = prompt
       .trim()
       .split(" ")
-      .filter((word) => word !== "");
+      .filter(
+        (word) =>
+          word !== "" && !excludedWords.includes(word.toLowerCase())
+      );
+      
     setPromptArray(words);
   }, [prompt]);
+  
 
   const submitPrompt = async () => {
-    if (promptArray.length === 0) {
-      console.warn("Prompt is empty, search failed.");
-      return;
+    if (promptArray.length === 0 || excludedWords.includes((item)=> item===prompt)) {
+      setError(true)
     }
     setGenerateClicked(true);
     setLoading(true);
-    setError(false);
     const conditions = [];
 
     promptArray.forEach((word) => {
+      // İlk olarak originalText ile tam eşleşme
       conditions.push({
-        originalTextArray: {
-          $elemMatch: { $regex: word, $options: "i" },
-        },
+        originalText: prompt.trim(),
       });
+
+      // Eğer yukarıdaki koşul eşleşmezse translateText ile tam eşleşme
       conditions.push({
-        translateTextArray: {
-          $elemMatch: { $regex: word, $options: "i" },
-        },
-      });
-      conditions.push({
-        originalText: { $regex: word, $options: "i" },
-      });
-      conditions.push({
-        translateText: { $regex: word, $options: "i" },
+        translateText: prompt.trim(),
       });
     });
 
-    // En az bir koşulun sağlanması için $or operatörü kullanılır.
-    const filters = { $or: conditions };
+    // İlk iki koşul ile filtreyi oluşturuyoruz
+    let filters = { $or: conditions };
 
     try {
-      const res = await axios.get("/api/imaginerData", {
+      // İlk API isteğini gönderiyoruz (tam eşleşmeler için)
+      let res = await axios.get("/api/imaginerData", {
         params: { filter: JSON.stringify(filters) },
       });
-      if (res) {
-        if(res.data.length>1){
-          await setDataResult(res.data);
-        }else if(res.data.length===1){
-          await setDataResult(res.data);
-        }
+
+      if (res.data.length > 0) {
+        setDataResult(res.data);
         setLoading(false);
-      };
+        return; // Eğer veri bulunursa, işlemi sonlandırıyoruz
+      }
+
+      // Eğer veri dönmezse, ikinci aşama koşulları için filtreyi oluşturuyoruz
+      const newConditions = [];
+      promptArray.forEach((word) => {
+        if (promptArray.length > 1) {
+          // 3. koşul: originalTextArray ile kelime bazında eşleşme
+          newConditions.push({
+            originalTextArray: {
+              $elemMatch: { $regex: word, $options: "i" },
+            },
+          });
+
+          // 4. koşul: translateTextArray ile kelime bazında eşleşme
+          newConditions.push({
+            translateTextArray: {
+              $elemMatch: { $regex: word, $options: "i" },
+            },
+          });
+        }
+      });
+
+      // İkinci API isteğini gönderiyoruz (kelime bazında eşleşmeler için)
+      filters = { $or: newConditions };
+      res = await axios.get("/api/imaginerData", {
+        params: { filter: JSON.stringify(filters) },
+      });
+
+      if (res.data.length > 0) {
+        setDataResult(res.data);
+      } else {
+        console.warn("No results found.");
+      }
+      setLoading(false);
     } catch (error) {
       console.error("Hata oluştu:", error);
       setLoading(false);
@@ -79,8 +109,9 @@ export function PromptProvider({ children }) {
     dataResult,
     loading,
     error,
-    generateClicked
+    generateClicked,
   };
+
   return (
     <PromptContext.Provider value={data}>{children}</PromptContext.Provider>
   );
