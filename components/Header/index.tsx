@@ -22,7 +22,7 @@ function Header() {
                 This project provides a platform where users can generate content by inputting prompts; they can automatically create stories or images based on the text they provide.
               </Typography>
             </div>
-            <Image
+            <img
               src="/logo/logo.png"
               alt="ImaginerAI Logo"
               style={{

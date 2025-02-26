@@ -12,24 +12,29 @@ export function PromptProvider({ children }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [dataResult, setDataResult] = useState();
-  const excludedWords = ["of", "the", "a", "an"]; 
+  const excludedWords = ["of", "the", "a", "an"];
 
   useEffect(() => {
     const words = prompt
       .trim()
       .split(" ")
       .filter(
-        (word) =>
-          word !== "" && !excludedWords.includes(word.toLowerCase())
+        (word) => word !== "" && !excludedWords.includes(word.toLowerCase())
       );
-      
+
     setPromptArray(words);
   }, [prompt]);
-  
+
+  useEffect(() => {
+    console.log("arr : ", promptArray);
+  }, [promptArray]);
 
   const submitPrompt = async () => {
-    if (promptArray.length === 0 || excludedWords.includes((item)=> item===prompt)) {
-      setError(true)
+    if (
+      promptArray.length === 0 ||
+      excludedWords.includes((item) => item === prompt)
+    ) {
+      setError(true);
     }
     setGenerateClicked(true);
     setLoading(true);
@@ -44,6 +49,16 @@ export function PromptProvider({ children }) {
       // Eğer yukarıdaki koşul eşleşmezse translateText ile tam eşleşme
       conditions.push({
         translateText: prompt.trim(),
+      });
+
+      // originalTextArray içinde prompt bazlı eşleşme
+      conditions.push({
+        originalTextArray: { $elemMatch: { $regex: prompt, $options: "i" } },
+      });
+
+      // translateTextArray içinde prompt bazlı eşleşme
+      conditions.push({
+        translateTextArray: { $elemMatch: { $regex: prompt, $options: "i" } },
       });
     });
 
@@ -64,34 +79,36 @@ export function PromptProvider({ children }) {
       }
 
       // Eğer veri dönmezse, ikinci aşama koşulları için filtreyi oluşturuyoruz
-      const newConditions = [];
-      promptArray.forEach((word) => {
-        if (promptArray.length > 1) {
-          // 3. koşul: originalTextArray ile kelime bazında eşleşme
-          newConditions.push({
-            originalTextArray: {
-              $elemMatch: { $regex: word, $options: "i" },
-            },
-          });
+      if (promptArray && promptArray.length > 1) {
+        const newConditions = [];
+        promptArray.forEach((word) => {
+          if (promptArray.length > 1) {
+            // 3. koşul: originalTextArray ile kelime bazında eşleşme
+            newConditions.push({
+              originalTextArray: {
+                $elemMatch: { $regex: word, $options: "i" },
+              },
+            });
 
-          // 4. koşul: translateTextArray ile kelime bazında eşleşme
-          newConditions.push({
-            translateTextArray: {
-              $elemMatch: { $regex: word, $options: "i" },
-            },
-          });
+            // 4. koşul: translateTextArray ile kelime bazında eşleşme
+            newConditions.push({
+              translateTextArray: {
+                $elemMatch: { $regex: word, $options: "i" },
+              },
+            });
+          }
+        });
+
+        // İkinci API isteğini gönderiyoruz (kelime bazında eşleşmeler için)
+        filters = { $or: newConditions };
+        res = await axios.get("/api/imaginerData", {
+          params: { filter: JSON.stringify(filters) },
+        });
+
+        if (res.data.length > 0) {
+          setDataResult(res.data);
+          setError(false);
         }
-      });
-
-      // İkinci API isteğini gönderiyoruz (kelime bazında eşleşmeler için)
-      filters = { $or: newConditions };
-      res = await axios.get("/api/imaginerData", {
-        params: { filter: JSON.stringify(filters) },
-      });
-
-      if (res.data.length > 0) {
-        setDataResult(res.data);
-        setError(false);
       } else {
         console.warn("No results found.");
       }

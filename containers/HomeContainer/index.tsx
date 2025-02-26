@@ -20,6 +20,8 @@ function HomeContainer() {
     if(dataResult){
       console.log("dataLength [0]: ", dataResult[0].length , "dataLEngth : ", dataResult.length);
     }
+    console.log("dataResult  : ",dataResult);
+    
   },[dataResult])
 
   return (
@@ -35,7 +37,7 @@ function HomeContainer() {
                     <LoadingSpinner />
                   ) : error ? (
                     <Alert color="error">An error occurred while loading the image.</Alert>
-                  ) : dataResult.length === 0 ? (
+                  ) : !dataResult || dataResult?.length===0 ? (
                     <Alert color="warning" sx={{ "& .MuiAlert-message": { paddingTop: "0px" } }}>
                       <Typography variant="h6" gutterBottom>Hello.</Typography>
                       I have not had such a record loaded into my memory before. If you want, you can add it using the add data button on the home page{" "}
