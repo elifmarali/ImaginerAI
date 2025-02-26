@@ -1,9 +1,9 @@
-import Image1 from "@/assets/images/example-1.png";
-import Image2 from "@/assets/images/example-2.png";
-import Image3 from "@/assets/images/example-3.png";
-import Image4 from "@/assets/images/example-4.png";
-import Image5 from "@/assets/images/example-5.png";
-import Image6 from "@/assets/images/example-6.png";
+import Image1 from "@/public/images/example-1.png";
+import Image2 from "@/public/images/example-2.png";
+import Image3 from "@/public/images/example-3.png";
+import Image4 from "@/public/images/example-4.png";
+import Image5 from "@/public/images/example-5.png";
+import Image6 from "@/public/images/example-6.png";
 
 export const Images = [
   {

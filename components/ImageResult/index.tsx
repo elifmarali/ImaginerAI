@@ -2,7 +2,6 @@
 import { usePrompt } from '@/context/usePrompt';
 import Image from 'next/image';
 import React from 'react';
-import DownloadSVG from "@/assets/icons/download.svg";
 import styles from "@/components/ImageResult/style.module.scss";
 
 function ImageResult() {
@@ -28,7 +27,7 @@ function ImageResult() {
         className={`absolute bottom-2 left-64 bg-gray-300 p-2 rounded-md shadow-md ${styles.downloadButton}`}
       >
         <Image
-          src={DownloadSVG}
+          src="/icons/download.svg"
           width={14}
           height={14}
           alt="Download Image"

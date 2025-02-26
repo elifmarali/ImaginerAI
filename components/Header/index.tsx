@@ -4,7 +4,6 @@ import Typography from '@mui/material/Typography';
 import { useSelected } from '@/context/useSelected';
 import ColorfullButton from '../ColorfullButton';
 import Image from 'next/image';
-import Logo from "@/assets/logo/logo.png"
 function Header() {
   const { selectedTab } = useSelected();
 
@@ -24,7 +23,7 @@ function Header() {
               </Typography>
             </div>
             <Image
-              src={Logo}
+              src="/logo/logo.png"
               alt="ImaginerAI Logo"
               style={{
                 borderRadius: "50%",

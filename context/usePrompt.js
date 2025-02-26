@@ -59,6 +59,7 @@ export function PromptProvider({ children }) {
       if (res.data.length > 0) {
         setDataResult(res.data);
         setLoading(false);
+        setError(false);
         return; // Eğer veri bulunursa, işlemi sonlandırıyoruz
       }
 
@@ -90,6 +91,7 @@ export function PromptProvider({ children }) {
 
       if (res.data.length > 0) {
         setDataResult(res.data);
+        setError(false);
       } else {
         console.warn("No results found.");
       }
