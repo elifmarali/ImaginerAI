@@ -21,13 +21,8 @@ export function PromptProvider({ children }) {
       .filter(
         (word) => word !== "" && !excludedWords.includes(word.toLowerCase())
       );
-
     setPromptArray(words);
   }, [prompt]);
-
-  useEffect(() => {
-    console.log("arr : ", promptArray);
-  }, [promptArray]);
 
   const submitPrompt = async () => {
     if (
@@ -41,32 +36,23 @@ export function PromptProvider({ children }) {
     const conditions = [];
 
     promptArray.forEach((word) => {
-      // İlk olarak originalText ile tam eşleşme
       conditions.push({
         originalText: prompt.trim(),
       });
-
-      // Eğer yukarıdaki koşul eşleşmezse translateText ile tam eşleşme
       conditions.push({
         translateText: prompt.trim(),
       });
-
-      // originalTextArray içinde prompt bazlı eşleşme
       conditions.push({
         originalTextArray: { $elemMatch: { $regex: prompt, $options: "i" } },
       });
-
-      // translateTextArray içinde prompt bazlı eşleşme
       conditions.push({
         translateTextArray: { $elemMatch: { $regex: prompt, $options: "i" } },
       });
     });
 
-    // İlk iki koşul ile filtreyi oluşturuyoruz
     let filters = { $or: conditions };
 
     try {
-      // İlk API isteğini gönderiyoruz (tam eşleşmeler için)
       let res = await axios.get("/api/imaginerData", {
         params: { filter: JSON.stringify(filters) },
       });
@@ -75,22 +61,19 @@ export function PromptProvider({ children }) {
         setDataResult(res.data);
         setLoading(false);
         setError(false);
-        return; // Eğer veri bulunursa, işlemi sonlandırıyoruz
+        return;
       }
 
-      // Eğer veri dönmezse, ikinci aşama koşulları için filtreyi oluşturuyoruz
       if (promptArray && promptArray.length > 1) {
         const newConditions = [];
         promptArray.forEach((word) => {
           if (promptArray.length > 1) {
-            // 3. koşul: originalTextArray ile kelime bazında eşleşme
             newConditions.push({
               originalTextArray: {
                 $elemMatch: { $regex: word, $options: "i" },
               },
             });
 
-            // 4. koşul: translateTextArray ile kelime bazında eşleşme
             newConditions.push({
               translateTextArray: {
                 $elemMatch: { $regex: word, $options: "i" },
@@ -99,7 +82,6 @@ export function PromptProvider({ children }) {
           }
         });
 
-        // İkinci API isteğini gönderiyoruz (kelime bazında eşleşmeler için)
         filters = { $or: newConditions };
         res = await axios.get("/api/imaginerData", {
           params: { filter: JSON.stringify(filters) },
@@ -112,7 +94,46 @@ export function PromptProvider({ children }) {
       } else {
         console.warn("No results found.");
       }
-      setLoading(false);
+
+      // Google araması yapılacak
+      if (res.data.length === 0) {
+        console.log("GOOGLE ARAMASI YAPILACAK");
+
+        // Google Custom Search API ile görsel arama yapılacak
+        const searchQuery = prompt.trim();  // Arama yapılacak terim
+
+        try {
+          const googleRes = await axios.get(
+            `https://www.googleapis.com/customsearch/v1`,
+            {
+              params: {
+                q: searchQuery,
+                //cx: "YOUR_CUSTOM_SEARCH_ENGINE_ID", // Arama motoru kimliği
+                key: process.env.NEXT_PUBLIC_API_KEY, // Google API Anahtarı
+                searchType: "image", // Görsel araması yap
+              },
+            }
+          );
+
+          if (googleRes.data.items && googleRes.data.items.length > 0) {
+            // Arama sonuçlarından en çok uygun görseli seç
+            const mostRelevantImage = googleRes.data.items[0].link; // İlk görseli al
+
+            console.log("En uygun görsel:", mostRelevantImage);
+
+            // Görseli kullanıcıya gösterebilir ve veritabanına kaydedebilirsiniz
+            setDataResult([{ imageUrl: mostRelevantImage }]);
+            setLoading(false);
+          } else {
+            console.warn("Google'dan sonuç bulunamadı.");
+            setLoading(false);
+          }
+        } catch (error) {
+          console.error("Google araması sırasında hata:", error);
+          setLoading(false);
+          setError(true);
+        }
+      }
     } catch (error) {
       console.error("Hata oluştu:", error);
       setLoading(false);
