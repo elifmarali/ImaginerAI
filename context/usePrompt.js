@@ -94,46 +94,6 @@ export function PromptProvider({ children }) {
       } else {
         console.warn("No results found.");
       }
-
-      // Google araması yapılacak
-      if (res.data.length === 0) {
-        console.log("GOOGLE ARAMASI YAPILACAK");
-
-        // Google Custom Search API ile görsel arama yapılacak
-        const searchQuery = prompt.trim();  // Arama yapılacak terim
-
-        try {
-          const googleRes = await axios.get(
-            `https://www.googleapis.com/customsearch/v1`,
-            {
-              params: {
-                q: searchQuery,
-                //cx: "YOUR_CUSTOM_SEARCH_ENGINE_ID", // Arama motoru kimliği
-                key: process.env.NEXT_PUBLIC_API_KEY, // Google API Anahtarı
-                searchType: "image", // Görsel araması yap
-              },
-            }
-          );
-
-          if (googleRes.data.items && googleRes.data.items.length > 0) {
-            // Arama sonuçlarından en çok uygun görseli seç
-            const mostRelevantImage = googleRes.data.items[0].link; // İlk görseli al
-
-            console.log("En uygun görsel:", mostRelevantImage);
-
-            // Görseli kullanıcıya gösterebilir ve veritabanına kaydedebilirsiniz
-            setDataResult([{ imageUrl: mostRelevantImage }]);
-            setLoading(false);
-          } else {
-            console.warn("Google'dan sonuç bulunamadı.");
-            setLoading(false);
-          }
-        } catch (error) {
-          console.error("Google araması sırasında hata:", error);
-          setLoading(false);
-          setError(true);
-        }
-      }
     } catch (error) {
       console.error("Hata oluştu:", error);
       setLoading(false);
