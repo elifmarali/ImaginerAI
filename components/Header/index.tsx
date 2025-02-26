@@ -3,7 +3,6 @@ import React from 'react'
 import Typography from '@mui/material/Typography';
 import { useSelected } from '@/context/useSelected';
 import ColorfullButton from '../ColorfullButton';
-import Image from 'next/image';
 function Header() {
   const { selectedTab } = useSelected();
 
