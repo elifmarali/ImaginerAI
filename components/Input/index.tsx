@@ -1,9 +1,9 @@
 "use client";
-import React, { useState } from 'react'
+import React from 'react'
 import styles from "@/components/Input/style.module.scss";
 import { usePrompt } from "@/context/usePrompt"
 function Input() {
-    const { prompt, setPrompt, submitPrompt }: any = usePrompt();
+    const { prompt, setPrompt, submitPrompt } = usePrompt();
     return (
         <div className={styles.imaginerInput}>
             <form className={styles.form} onSubmit={(e) => {

@@ -41,7 +41,6 @@ function Header() {
                 target.style.transform = "scale(1)"; // Hoverdan çıkınca eski haline dönme
               }}
             />
-
           </div>
         ) : (
           selectedTab === "generate" ? (
@@ -53,7 +52,7 @@ function Header() {
                 we handle the rest
               </Typography>
               <Typography variant="h5" gutterBottom >
-                Tell us a prompt and we'll generate a story for you.
+                Tell us a prompt and we&apos;ll generate a story for you.
               </Typography>
             </>
           ) : (
@@ -62,10 +61,10 @@ function Header() {
               <Typography variant="h2" gutterBottom>
                 Add Your Data,
                 <br />
-                Let's create something new!
+                Let&apos;s create something new!
               </Typography>
               <Typography variant="h6" gutterBottom>
-                Provide the necessary information and we'll generate content based on it.
+                Provide the necessary information and we&apos;ll generate content based on it.
               </Typography>
             </>
           )

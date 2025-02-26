@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 import GitHubIcon from "@/assets/icons/github.svg";

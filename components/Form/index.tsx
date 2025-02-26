@@ -1,10 +1,9 @@
 "use client";
 import { TextField } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Button from '@mui/joy/Button';
 import SvgIcon from '@mui/joy/SvgIcon';
 import { styled } from '@mui/joy';
-import ColorfullButton from '../ColorfullButton';
 import { submitAddData } from "@/services/AddData/index"
 import { useSelected } from '@/context/useSelected';
 
@@ -39,7 +38,7 @@ function Form() {
     }
   }
 
-  const addData = async (e: any) => {
+  const addData = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await alertControl();
     if (!textError.isError && !fileError.isError && file && text) {

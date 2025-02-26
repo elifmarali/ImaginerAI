@@ -1,20 +1,12 @@
 "use client";
 import { usePrompt } from '@/context/usePrompt';
 import Image from 'next/image';
-import React, { useEffect } from 'react';
+import React from 'react';
 import DownloadSVG from "@/assets/icons/download.svg";
 import styles from "@/components/ImageResult/style.module.scss";
 
 function ImageResult() {
   const { dataResult } = usePrompt();
-
-  useEffect(() => {
-    console.log("dataResult.fileBase64 : ", dataResult[0].fileBase64);
-  }, [dataResult.fileBase64]);
-
-  useEffect(() => {
-    console.log("dataResult : ", dataResult);
-  }, [dataResult]);
 
   if (!dataResult) {
     return <p>Resim yüklenemedi.</p>;
